@@ -1,11 +1,18 @@
-function displayTiffImagesMosaic()
-    % Open a folder selection dialog
-    folderPath = uigetdir(pwd, 'Select folder containing TIFF images');
+function displayTiffImagesMosaic(folderPath)
+    % To run the function, you can now call it in two ways:
+    % displayTiffImagesMosaic();  % This will open a folder selection dialog
+    % displayTiffImagesMosaic('C:\path\to\your\tiff\folder');  % This will use the provided folder path
+    % displayTiffImagesMosaic('../data/Jun_06_2024/M1_TIF')
     
-    % Check if a folder was selected
-    if folderPath == 0
-        disp('No folder selected. Operation cancelled.');
-        return;
+    % If no folder path is provided, open a folder selection dialog
+    if nargin < 1 || isempty(folderPath)
+        folderPath = uigetdir(pwd, 'Select folder containing TIFF images');
+    
+        % Check if a folder was selected
+        if folderPath == 0
+            disp('No folder selected. Operation cancelled.');
+            return;
+        end
     end
     
     % Get all TIFF files in the specified folder
@@ -27,37 +34,79 @@ function displayTiffImagesMosaic()
     imageCell = cell(1, numImages);
     imageNames = cell(1, numImages);
     
-    % Load each image
+    % Load and crop each image
     for i = 1:numImages
         imgPath = fullfile(folderPath, tifFiles(i).name);
-        imageCell{i} = imread(imgPath);
+        img = imread(imgPath);
+    
+        % Crop the image
+        croppedImg = cropWhiteBorder(img);
+    
+        imageCell{i} = croppedImg;
         imageNames{i} = tifFiles(i).name;
     end
     
     % Create a figure
-    figure('Name', 'TIFF Images Mosaic', 'NumberTitle', 'off');
+    fig = figure('Name', 'TIFF Images Mosaic', 'NumberTitle', 'off');
+    set(gcf, 'Color', 'k');  % Set figure background to black
     
     % Display images as a mosaic
     % montage(imageCell, 'Size', 'auto', 'ThumbnailSize', []);
     montage(imageCell);
     
-    % Add title to the mosaic
-    title(['TIFF Images in: ' folderPath], 'FontSize', 16, 'Interpreter', 'none');
-    
-    % Add image names as labels
-    ax = gca;
-    ax.Visible = 'on';
-    ax.YAxis.Visible = 'off';
-    ax.XAxis.Visible = 'off';
-    
-    [rows, cols] = size(ax.Children.Children);
-    for i = 1:numImages
-        [row, col] = ind2sub([rows, cols], i);
-        text(col, row, imageNames{i}, 'HorizontalAlignment', 'center', ...
-             'VerticalAlignment', 'bottom', 'Color', 'white', ...
-             'FontSize', 8, 'Interpreter', 'none');
-    end
+    % Capture the figure as an image
+    frame = getframe(fig);
+    mosaicImage = frame2im(frame);
+
+    % Get the folder name and its parent folder name
+    [parentPath, folderName] = fileparts(folderPath);
+    [~, parentFolderName] = fileparts(parentPath);
+
+    % Create the output filename with parent and current folder names
+    outputFileName = fullfile(folderPath, [parentFolderName '_' folderName '_mosaic.tif']);
+
+    disp('Press any key to continue...');
+    pause('on'); % Enable pausing
+    pause;       % Wait for keypress
+
+    imwrite(mosaicImage, outputFileName, 'tif');
+
+    % imwrite(mosaicImage, 'mosaic.tif', 'tif');
+
+    % Close the figure
+    close(fig);
+
 end
 
-% To run the function, simply call:
-% displayTiffImagesMosaic();
+function croppedImg = cropWhiteBorder(img)
+    % Convert to grayscale if it's a color image
+    if size(img, 3) == 3
+        grayImg = rgb2gray(img);
+    else
+        grayImg = img;
+    end
+    
+    % Find the bounding box of the non-white area
+    thresh = graythresh(grayImg);
+    bw = imbinarize(grayImg, thresh);
+    stats = regionprops(~bw, 'BoundingBox');
+    
+    % Get the bounding box
+    bbox = stats.BoundingBox;
+    
+    % Add additional cropping (5 pixels from each side)
+    extraCrop = 5;
+    bbox(1) = bbox(1) + extraCrop;
+    bbox(2) = bbox(2) + extraCrop;
+    bbox(3) = bbox(3) - 2*extraCrop;
+    bbox(4) = bbox(4) - 2*extraCrop;
+    
+    % Ensure bbox doesn't exceed image boundaries
+    bbox(1) = max(1, bbox(1));
+    bbox(2) = max(1, bbox(2));
+    bbox(3) = min(size(img, 2) - bbox(1) + 1, bbox(3));
+    bbox(4) = min(size(img, 1) - bbox(2) + 1, bbox(4));
+    
+    % Crop the image
+    croppedImg = imcrop(img, bbox);
+end
