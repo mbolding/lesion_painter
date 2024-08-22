@@ -2,14 +2,15 @@ function thresholdROI(filename)
 % thresholdROI('/Users/mbolding/Documents/MATLAB/analysis_for_collaborators/Andrabi_mouse_stroke_August_2024/mosaic_data/Jun_06_2024_M1_TIF_mosaic.tif')
 
 thresholdAdj = 1.5;
-drawROI = true;
+drawROI = true; % have the user draw an ROI, is default action
+eraseROI = false;
 
 % Check if file exists
 if ~exist(filename, 'file')
     error('File does not exist: %s', filename);
 end
 
-% Read the image
+%% Read the image
 img = imread(filename);
 % Create a red overlay
 redOverlay = img;
@@ -22,36 +23,44 @@ else
 end
 
 % Display the image
-imshow(grayImg);
+imshow(redOverlay);
 
+%% user loop
 while 1
     undoRed = redOverlay;
-    if drawROI
+    if drawROI && ~eraseROI
+        disp("draw")
         % Let the user draw an ROI
         h = drawrectangle();
-
         % Create a mask from the ROI
         mask = createMask(h);
-
-        % Apply method for thresholding within the ROI
-
     else
         drawROI = true;
     end
-    roiPixels = grayImg(mask);
-    thresh = graythresh(roiPixels) * thresholdAdj;
 
-    % Apply thresholding inside the ROI
-    thresholded = grayImg > (thresh * 255);
-
-    % Update red overlay 
-    redOverlay(:,:,1) = redOverlay(:,:,1) + uint8(thresholded & mask) * 255;
-    redOverlay(:,:,2) = redOverlay(:,:,2) - uint8(thresholded & mask) * 100;
-    redOverlay(:,:,3) = redOverlay(:,:,3) - uint8(thresholded & mask) * 100;
-
-    % Ensure values are within 0-255 range
-    redOverlay = max(0, min(255, redOverlay));
-
+    if eraseROI == true
+        disp("erase")
+        % Let the user draw an ROI
+        h = drawrectangle();
+        % Create a mask from the ROI
+        mask = createMask(h);
+        mask = repmat(mask, [1 1 3]);
+        redOverlay(logical(mask)) = img(logical(mask));
+        eraseROI = false;
+    else
+        disp("threshold")
+        % Determinine a threshold within the ROI
+        thresh = graythresh(grayImg(mask)) * thresholdAdj;
+        % Apply thresholding inside the ROI
+        thresholdedImg = grayImg > (thresh * 255);
+        % threshMask = thresholdedImg & mask;
+        % Update red overlay. 
+        redOverlay(:,:,1) = redOverlay(:,:,1) + uint8(thresholdedImg & mask) * 255;
+        redOverlay(:,:,2) = redOverlay(:,:,2) - uint8(thresholdedImg & mask) * 100;
+        redOverlay(:,:,3) = redOverlay(:,:,3) - uint8(thresholdedImg & mask) * 100;
+        % Ensure values are within 0-255 range
+        redOverlay = max(0, min(255, redOverlay));
+    end
     % Display the result
     imshow(redOverlay);
 
@@ -66,15 +75,32 @@ while 1
             redOverlay = undoRed;
             imshow(redOverlay);
         end
-        if key == 'f'  % undo
+        if key == 'd'  % change threshold, grow lesion
             redOverlay = undoRed;
-            thresholdAdj = thresholdAdj * 1.05
+            thresholdAdj = thresholdAdj * 1.05;
             drawROI = false;
         end
-        if key == 'd'  % undo
+        if key == 'f'  % change threshold, shrink lesion
             redOverlay = undoRed;
-            thresholdAdj = thresholdAdj * 0.95
+            thresholdAdj = thresholdAdj * 0.95;
             drawROI = false;
+        end
+        if key == 'e'  % erase red from masked area
+            eraseROI = true;
+        end
+
+        if key == 's'  % save result
+            disp("save")
+            % Capture the figure as an image
+            frame = getframe(gcf);
+            saveImage = frame2im(frame);
+
+            % Get the folder name and its parent folder name
+            [~, bareFileName] = fileparts(filename);
+
+            % Create the output filename with parent and current folder names
+            outputFileName = [bareFileName, '_lesion.tif'];
+            imwrite(saveImage, outputFileName, 'tif')
         end
 
     end
