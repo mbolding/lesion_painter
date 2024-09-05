@@ -1,4 +1,7 @@
 function displayTiffImages()
+% To run the function, simply call:
+% displayTiffImages();
+
     % Open a folder selection dialog
     folderPath = uigetdir(pwd, 'Select folder containing TIFF images');
     
@@ -48,5 +51,3 @@ function displayTiffImages()
     sgtitle(['TIFF Images in: ' folderPath], 'FontSize', 16, 'Interpreter', 'none');
 end
 
-% To run the function, simply call:
-% displayTiffImages();

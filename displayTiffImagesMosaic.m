@@ -2,7 +2,7 @@ function displayTiffImagesMosaic(folderPath)
     % To run the function, you can now call it in two ways:
     % displayTiffImagesMosaic();  % This will open a folder selection dialog
     % displayTiffImagesMosaic('C:\path\to\your\tiff\folder');  % This will use the provided folder path
-    % displayTiffImagesMosaic('../data/Jun_06_2024/M1_TIF')
+    % displayTiffImagesMosaic('../original_data/Jun_06_2024/M1_TIF')
     
     % If no folder path is provided, open a folder selection dialog
     if nargin < 1 || isempty(folderPath)
@@ -65,13 +65,13 @@ function displayTiffImagesMosaic(folderPath)
     % Create the output filename with parent and current folder names
     outputFileName = fullfile(folderPath, [parentFolderName '_' folderName '_mosaic.tif']);
 
+    % let the user look at the image for QA
     disp('Press any key to continue...');
     pause('on'); % Enable pausing
     pause;       % Wait for keypress
 
+    % write the mosaic image to disk in the folder with the original TIFs 
     imwrite(mosaicImage, outputFileName, 'tif');
-
-    % imwrite(mosaicImage, 'mosaic.tif', 'tif');
 
     % Close the figure
     close(fig);
