@@ -37,8 +37,11 @@ end
 % Display the image
 imshow(redOverlay);
 
-%% user loop
-while 1
+%% user loop 
+% FIXME: this event loop is dumb. It should draw ROI when left mouse button
+% is down and do other stuff with key presses or other mouse buttons.
+% it is modal (has 2 states) currently and does not need to be that way. 
+while 1 % until user quits
     undoRed = redOverlay;
     if drawROI && ~eraseROI
         disp("draw")
@@ -76,7 +79,7 @@ while 1
     % Display the result
     imshow(redOverlay);
 
-    %% Wait for user input
+    %% Wait for user input 
     k = waitforbuttonpress;
     if k == 1 % If a key was pressed
         key = get(gcf, 'CurrentCharacter');
