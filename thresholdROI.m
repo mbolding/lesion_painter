@@ -110,7 +110,6 @@ while 1
         if key == 'e'  % erase red from masked area
             eraseROI = true;
         end
-
         if key == 's'  % save result as an image
             disp("save")
             % Capture the figure as an image
@@ -134,8 +133,8 @@ while 1
             % Save the image
             imwrite(saveImage, outputFileName, 'tif')
             disp(['Image saved as: ', outputFileName]);
+            drawROI = false;
         end
-
     end
 end
 
