@@ -1,9 +1,10 @@
 A set of Matlab scripts to ease infarct lesion segmentation in 9.4T T2 MRI images (hyperintense) that have poor homogeneity.  
 ### main files in this repository
-- displayTiffImagesMosaic.m : take the TIFF images output from bruker as individual files and make a mosaic for thresholding 
-- findRedPixels.m : finds the area of the segmented lesion. multiply by voxel volume to get the lesion volume approximation
-- processAllTiffFolders.m : you can use this to run *displayTiffImagesMosaic* on a folder tree if things are named right
-- thresholdROI.m : interactive segmentation for poor homogeneity images
+- [displayTiffImagesMosaic.m](displayTiffImagesMosaic.m): take the TIFF images output from bruker as individual files and make a mosaic for thresholding
+- [findRedPixels.m](findRedPixels.m): finds the area of the segmented lesion. multiply by voxel volume to get the lesion volume approximation
+- [processAllTiffFolders.m](processAllTiffFolders.m): you can use this to run *displayTiffImagesMosaic* on a folder tree if things are named right
+- [thresholdROI.m](thresholdROI.m): interactive segmentation for poor homogeneity images
+
 
 ## instructions for analyzing one volume
 ### 1. run *displayTiffImagesMosaic.m* on the folder of tifs to make a mosaic image of each volume
@@ -77,36 +78,9 @@ for our current thinslice T2 protocol...
 - Voxel size: 0.078125 x 0.078125 x 0.5 mm
 - Voxel volume: 0.0030518 cubic mm
 
-### Example Code
-Below is a complete example that loads all DICOM files in a directory and displays the voxel size for the first file:
 
-```matlab
-% Specify the directory containing DICOM files
-dicomDir = uigetdir;
+[vox_size.m](vox_size.m) implements the above. 
 
-% List all DICOM files in the directory
-dicomFiles = dir(fullfile(dicomDir, '*.dcm'));
-
-% Check if there are any DICOM files in the directory
-if isempty(dicomFiles)
-    error('No DICOM files found in the specified directory.');
-end
-
-% Load the first DICOM file and get metadata
-filename = fullfile(dicomDir, dicomFiles(1).name);
-info = dicominfo(filename);
-imageData = dicomread(info);
-
-% Retrieve voxel size information from the metadata
-pixelSpacing = info.PixelSpacing;  % In-plane pixel spacing (row, column) in mm
-sliceThickness = info.SliceThickness;  % Thickness of the slices in mm
-
-% Combine to form voxel size
-voxelSize = [pixelSpacing(1), pixelSpacing(2), sliceThickness];
-
-% Display the voxel size
-fprintf('Voxel size: %.2f x %.2f x %.2f mm\n', voxelSize(1), voxelSize(2), voxelSize(3));
-```
 
 ## TIF folder organization
 data oraganization for the TIFs is a top level dir, then dir by date, then the sample dirs with the TIFs  e.g.: 
