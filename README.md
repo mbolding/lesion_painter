@@ -419,3 +419,43 @@ fprintf('Voxel size: %.2f x %.2f x %.2f mm\n', voxelSize(1), voxelSize(2), voxel
 ```
 
 
+data oraganization for the TIFs is a top level dir, then dir by date, then the sample dirs with the TIFs  e.g.: 
+```
+./trimmed_data/May_24_2024:
+M1_TIF			M3_TIF			MRI_Notes.jpeg
+M2_TIF			M5_TIF			May_24_2024_Andrabi.zip
+
+./trimmed_data/May_24_2024/M1_TIF:
+4_T2_RARE_thinslice_Im01.tif	4_T2_RARE_thinslice_Im07.tif	4_T2_RARE_thinslice_Im13.tif	4_T2_RARE_thinslice_Im19.tif
+4_T2_RARE_thinslice_Im02.tif	4_T2_RARE_thinslice_Im08.tif	4_T2_RARE_thinslice_Im14.tif	4_T2_RARE_thinslice_Im20.tif
+4_T2_RARE_thinslice_Im03.tif	4_T2_RARE_thinslice_Im09.tif	4_T2_RARE_thinslice_Im15.tif	4_T2_RARE_thinslice_Im21.tif
+4_T2_RARE_thinslice_Im04.tif	4_T2_RARE_thinslice_Im10.tif	4_T2_RARE_thinslice_Im16.tif
+4_T2_RARE_thinslice_Im05.tif	4_T2_RARE_thinslice_Im11.tif	4_T2_RARE_thinslice_Im17.tif
+4_T2_RARE_thinslice_Im06.tif	4_T2_RARE_thinslice_Im12.tif	4_T2_RARE_thinslice_Im18.tif
+
+./trimmed_data/May_24_2024/M2_TIF:
+4_T2_RARE_thinslice_Im01.tif	4_T2_RARE_thinslice_Im07.tif	4_T2_RARE_thinslice_Im13.tif	4_T2_RARE_thinslice_Im19.tif...
+
+...
+
+./trimmed_data/May_30_2024:
+IMG_1267.JPG		M1_TIF			M3_TIF			May_30_2024_Andrabi.zip
+
+./trimmed_data/May_30_2024/M1_TIF:
+4_T2_RARE_thinslice_Im01.tif	4_T2_RARE_thinslice_Im07.tif	4_T2_RARE_thinslice_Im13.tif	4_T2_RARE_thinslice_Im19.tif
+4_T2_RARE_thinslice_Im02.tif	4_T2_RARE_thinslice_Im08.tif	4_T2_RARE_thinslice_Im14.tif	4_T2_RARE_thinslice_Im20.tif
+4_T2_RARE_thinslice_Im03.tif	4_T2_RARE_thinslice_Im09.tif	4_T2_RARE_thinslice_Im15.tif	4_T2_RARE_thinslice_Im21.tif
+4_T2_RARE_thinslice_Im04.tif	4_T2_RARE_thinslice_Im10.tif	4_T2_RARE_thinslice_Im16.tif
+4_T2_RARE_thinslice_Im05.tif	4_T2_RARE_thinslice_Im11.tif	4_T2_RARE_thinslice_Im17.tif
+4_T2_RARE_thinslice_Im06.tif	4_T2_RARE_thinslice_Im12.tif	4_T2_RARE_thinslice_Im18.tif
+
+./trimmed_data/May_30_2024/M3_TIF:
+4_T2_RARE_thinslice_Im01.tif	4_T2_RARE_thinslice_Im07.tif	4_T2_RARE_thinslice_Im13.tif	4_T2_RARE_thinslice_Im19.tif
+4_T2_RARE_thinslice_Im02.tif	4_T2_RARE_thinslice_Im08.tif	4_T2_RARE_thinslice_Im14.tif...	
+
+...
+
+
+```
+
+
