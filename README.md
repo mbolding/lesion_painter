@@ -8,7 +8,7 @@ A set of Matlab scripts to ease infarct lesion segmentation in 9.4T T2 MRI image
 
 ## instructions for analyzing one volume
 ### first run *displayTiffImagesMosaic* on the folder of tifs to make a mosaic image
-you can run *processAllTiffFolders.m* on this step instead to make mosaics of lots of volumes if things are organized correctly. see [below](## TIF folder organization). 
+you can run *processAllTiffFolders.m* on this step instead to make mosaics of lots of volumes if things are organized correctly. see [below](#TIF-folder-organization). 
 
 ```matlab
 function displayTiffImagesMosaic(folderPath)
