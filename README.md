@@ -252,7 +252,8 @@ end
 ```
 
 
-![image](https://res.craft.do/user/full/a47030e1-bee0-bde8-3bcf-105f3345ff32/doc/8F9DB22F-50D4-4753-8AD3-B573271A8049/AC9BD3B5-AB10-492F-B4AD-3CB19328524A_2/qK6ToxBXOrQVhsMdCfhNsTuRokt5L0cZywpnLzOh7Soz/Jun_06_2024_M1_TIF_mosaic_lesion.tiff)
+![image](https://github.com/user-attachments/assets/8046da97-bd16-45ce-90a5-fe7d48ffe251)
+
 
 ### then run *findRedPixels* on the lesion mosaic image to count the red pixels
 
