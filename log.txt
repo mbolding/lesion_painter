@@ -1,0 +1,1 @@
+../mosaic_data/Jun_06_2024_M1_TIF_mosaic_lesion.tif: 15583 red pixels found

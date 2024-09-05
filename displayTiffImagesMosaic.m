@@ -1,5 +1,5 @@
 function displayTiffImagesMosaic(folderPath)
-    % To run the function, you can now call it in two ways:
+    % To run the function, you can call it in two ways:
     % displayTiffImagesMosaic();  % This will open a folder selection dialog
     % displayTiffImagesMosaic('C:\path\to\your\tiff\folder');  % This will use the provided folder path
     % displayTiffImagesMosaic('../original_data/Jun_06_2024/M1_TIF')

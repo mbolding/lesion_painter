@@ -1,5 +1,47 @@
 function findRedPixels(filename)
-    % If no filename is provided, open a GUI to select a file
+% findRedPixels - Finds and highlights red pixels in an RGB TIFF image.
+%
+% Syntax:
+%   findRedPixels
+%   findRedPixels(filename)
+%
+% Description:
+%   This function reads an RGB TIFF image, identifies pixels where the
+%   red channel is significantly higher than the green and blue channels,
+%   and highlights those red pixels. The function also displays the
+%   original image, the red channel, the detected red pixels, and an
+%   image with the red pixels highlighted.
+%
+%   If no filename is provided as an argument, a GUI will open allowing
+%   you to select a TIFF file. The function then counts the number of
+%   red pixels found and appends this information along with the filename
+%   to a log file named 'log.txt'.
+%
+% Input Arguments:
+%   filename - (Optional) A string specifying the path to a TIFF image file.
+%
+% Example:
+%   findRedPixels('sample_image.tif');
+%
+%   % To select a file via GUI:
+%   findRedPixels;
+%
+% Output:
+%   The function displays several figures showing the original image, the
+%   red channel, the detected red pixels, and the red pixels highlighted
+%   in the original image. It also appends the filename and the number of
+%   detected red pixels to 'log.txt'.
+%
+% Notes:
+%   - The function assumes that the input image is an RGB image.
+%   - The log file 'log.txt' is created in the current working directory if
+%     it doesn't already exist.
+%   - The function uses morphological operations to clean up the detected
+%     red pixels by removing noise and small, isolated regions.
+%
+% test case: findRedPixels('../mosaic_data/Jun_06_2024_M1_TIF_mosaic_lesion.tif')
+
+
     if nargin < 1 || isempty(filename)
         [filename, pathname] = uigetfile('*.tif', 'Select a TIFF file');
         if isequal(filename, 0) || isequal(pathname, 0)
@@ -60,4 +102,15 @@ function findRedPixels(filename)
 
     % Output
     disp(['Number of red pixels found: ' num2str(numRedPixels)]);
+
+    % Append the result to log.txt so we don't have to cut and paste so
+    % much.
+    logFilename = 'log.txt';
+    fid = fopen(logFilename, 'a');  % Open log.txt in append mode
+    if fid == -1
+        error('Cannot open log.txt for writing.');
+    end
+    fprintf(fid, '%s: %d red pixels found\n', filename, numRedPixels);
+    fclose(fid);  % Close the file
+
 end

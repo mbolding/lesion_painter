@@ -1,9 +1,21 @@
 function thresholdROI(filename)
-% thresholdROI('/Users/mbolding/Documents/MATLAB/analysis_for_collaborators/Andrabi_mouse_stroke_August_2024/mosaic_data/Jun_06_2024_M1_TIF_mosaic.tif')
+
+% test case: thresholdROI('../mosaic_data/Jun_06_2024_M1_TIF_mosaic.tif')
+
+% If no filename is provided, open a GUI to select a file
+if nargin < 1 || isempty(filename)
+    [filename, pathname] = uigetfile('*.tif', 'Select a TIFF file');
+    if isequal(filename, 0) || isequal(pathname, 0)
+        disp('File selection cancelled');
+        return;
+    end
+    filename = fullfile(pathname, filename);
+end
 
 thresholdAdj = 1.5;
 drawROI = true; % have the user draw an ROI, is default action
 eraseROI = false;
+outputFileName = ''; % Initialize here to avoid errors later
 
 % Check if file exists
 if ~exist(filename, 'file')
@@ -64,12 +76,22 @@ while 1
     % Display the result
     imshow(redOverlay);
 
-    % Wait for user input
+    %% Wait for user input
     k = waitforbuttonpress;
     if k == 1 % If a key was pressed
         key = get(gcf, 'CurrentCharacter');
         if key == 'q'  % Exit if 'q' is pressed
-            break;
+            if isempty(outputFileName)
+                choice = questdlg('You haven''t saved the result. Are you sure you want to quit?', ...
+                    'Confirm Quit', ...
+                    'Yes', 'No', 'No');
+                if strcmp(choice, 'Yes')
+                    break;
+                end
+            else
+                findRedPixels(outputFileName)
+                break;
+            end
         end
         if key == 'u' % undo
             redOverlay = undoRed;
@@ -89,18 +111,29 @@ while 1
             eraseROI = true;
         end
 
-        if key == 's'  % save result
+        if key == 's'  % save result as an image
             disp("save")
             % Capture the figure as an image
             frame = getframe(gcf);
             saveImage = frame2im(frame);
 
             % Get the folder name and its parent folder name
-            [~, bareFileName] = fileparts(filename);
+            [inputPath, bareFileName] = fileparts(filename);
 
-            % Create the output filename with parent and current folder names
-            outputFileName = [bareFileName, '_lesion.tif'];
+            %% Create the output filename with parent and current folder
+            % names, show number of red pixels.
+
+            % Define the base output filename
+            outputFileName = fullfile(inputPath, [bareFileName, '_lesion.tif']);
+            % Check if the file already exists
+            counter = 1;
+            while exist(outputFileName, 'file')
+                outputFileName = fullfile(inputPath, [bareFileName, '_lesion_', num2str(counter), '.tif']);
+                counter = counter + 1;
+            end
+            % Save the image
             imwrite(saveImage, outputFileName, 'tif')
+            disp(['Image saved as: ', outputFileName]);
         end
 
     end
