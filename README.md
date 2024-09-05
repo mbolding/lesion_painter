@@ -258,7 +258,7 @@ disp('done.')
 end
 ```
 
-
+example segmentation
 ![image](https://github.com/user-attachments/assets/8046da97-bd16-45ce-90a5-fe7d48ffe251)
 
 
@@ -331,10 +331,10 @@ function findRedPixels(filename)
 end
 ```
 
-
+example output: Number of red pixels found: 15583
 ![image](https://res.craft.do/user/full/a47030e1-bee0-bde8-3bcf-105f3345ff32/doc/8F9DB22F-50D4-4753-8AD3-B573271A8049/1AD4C4F7-F212-48D4-BC09-FC155E910991_2/gwgIqTJvFkJ3uz3J5pZBNDZhqyBlahDlxlB2R1VxgDkz/Image.png)
 
-example output: Number of red pixels found: 15583
+
 
 ### finally multiply the number of pixels by the voxel volume to get the lesion volume. 
 
