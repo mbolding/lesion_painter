@@ -339,7 +339,7 @@ example output: Number of red pixels found: 15583
 ### finally multiply the number of pixels by the voxel volume to get the lesion volume. 
 
 
-determine the voxel volume by loading the DICOM into a DICOM viewer or into Matlab. 
+determine the voxel volume by loading the DICOM into a DICOM viewer (ITKSnap, OsiriX, MRICron, etc.) or into Matlab. 
 
 To load DICOM files into MATLAB and find the voxel size, you can follow these steps:
 
