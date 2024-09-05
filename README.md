@@ -375,8 +375,15 @@ sliceThickness = info.SliceThickness;  % Thickness of the slices in mm
 % Display the voxel size
 voxelSize = [pixelSpacing(1), pixelSpacing(2), sliceThickness];
 disp(['Voxel size: ', num2str(voxelSize(1)), ' x ', num2str(voxelSize(2)), ' x ', num2str(voxelSize(3)), ' mm']);
+
+% Display the voxel volume
+voxelVolume = prod(voxelSize);  % In cubic millimeters
+disp(['Voxel volume: ', num2str(voxelVolume), ' cubic mm']);
 ```
 
+for our current thinslice T2 protocol... 
+- Voxel size: 0.078125 x 0.078125 x 0.5 mm
+- Voxel volume: 0.0030518 cubic mm
 
 ### Example Code
 
