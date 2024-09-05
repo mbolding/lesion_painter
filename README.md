@@ -1,53 +1,44 @@
 A set of Matlab scripts to ease infarct lesion segmentation in 9.4T T2 MRI images (hyperintense) that have poor homogeneity.  
-### files in this repo
-- displayTiffImages.m : not used now
+### main files in this repository
 - displayTiffImagesMosaic.m : take the TIFF images output from bruker as individual files and make a mosaic for thresholding 
 - findRedPixels.m : finds the area of the segmented lesion. multiply by voxel volume to get the lesion volume approximation
 - processAllTiffFolders.m : you can use this to run *displayTiffImagesMosaic* on a folder tree if things are named right
-- thresholdROI.m : interactive segmentation for poor homageneity images
+- thresholdROI.m : interactive segmentation for poor homogeneity images
 
 ## instructions for analyzing one volume
-### first run *displayTiffImagesMosaic* on the folder of tifs to make a mosaic image
+### first run *displayTiffImagesMosaic.m* on the folder of tifs to make a mosaic image of each volume
 you can run *processAllTiffFolders.m* on this step instead to make mosaics of lots of volumes if things are organized correctly. see [below](#TIF-folder-organization). 
 
-### then run *thresholdROI* and draw boxes around the lesions to highlight them
-
-When your moue pointer is a cross you draw an ROI box. when you have a pointer, hit a key (below) or click the mouse to get a cross.
-
+### then run *thresholdROI.m* and draw boxes around the lesions on the mosaic volumes to paint them
+When your mouse pointer is a cross you can draw an ROI box. When you have a arrow, hit a key (see below) or click the mouse to get a cross.
 keys:
 
 	q: quit
 
 	u: undo last ROI, one level deep
 
-	d: decrease threshold, grow lesion
+	d: "decrease", shrink lesion
 
-	f: shrink lesion
+	f: "fill more", grow lesion
 
 	e: erase with ROI
 
-	s: save the result
-
+	s: save the result, calculate areas, and log the result to log.txt
 
 example segmentation
 ![image](https://github.com/user-attachments/assets/8046da97-bd16-45ce-90a5-fe7d48ffe251)
 
-
-### then run *findRedPixels* on the lesion mosaic image to count the red pixels
-
 example output: Number of red pixels found: 15583
 ![image](https://res.craft.do/user/full/a47030e1-bee0-bde8-3bcf-105f3345ff32/doc/8F9DB22F-50D4-4753-8AD3-B573271A8049/1AD4C4F7-F212-48D4-BC09-FC155E910991_2/gwgIqTJvFkJ3uz3J5pZBNDZhqyBlahDlxlB2R1VxgDkz/Image.png)
 
-### finally multiply the number of pixels by the voxel volume to get the lesion volume. 
+### finally multiply the number of pixels by the voxel volume to get the lesion volume by processing teh log file with *make_results_table.m*. 
 
-
-determine the voxel volume by loading the DICOM into a DICOM viewer (ITKSnap, OsiriX, MRICron, etc.) or into Matlab. 
+## to determine voxel volume
+Determine the voxel volume by loading the DICOM into a DICOM viewer (ITKSnap, OsiriX, MRICron, etc.) or into Matlab. 
 
 To load DICOM files into MATLAB and find the voxel size, you can follow these steps:
 
 ### 1. Load DICOM Files
-
-
 MATLAB offers functions to read DICOM files, such as `dicomread` for reading image data and `dicominfo` for extracting metadata.
 
 ```matlab
@@ -65,8 +56,6 @@ imageData = dicomread(info);
 
 
 ### 2. Access Voxel Size Information
-
-
 Voxel size information is typically stored in the DICOM metadata. Common field names include `PixelSpacing` and `SliceThickness`.
 
 ```matlab
@@ -88,8 +77,6 @@ for our current thinslice T2 protocol...
 - Voxel volume: 0.0030518 cubic mm
 
 ### Example Code
-
-
 Below is a complete example that loads all DICOM files in a directory and displays the voxel size for the first file:
 
 ```matlab
