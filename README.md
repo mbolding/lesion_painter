@@ -1,7 +1,14 @@
 A set of Matlab scripts to ease infarct lesion segmentation in 9.4T T2 MRI images (hyperintense) that have poor homogeneity.  
+### files in this repo
+- displayTiffImages.m : not used now
+- displayTiffImagesMosaic.m : take the TIFF images output from bruker as individual files and make a mosaic for thresholding 
+- findRedPixels.m : finds the area of the segmented lesion. multiply by voxel volume to get the lesion volume approximation
+- processAllTiffFolders.m : you can use this to run *displayTiffImagesMosaic* on a folder tree if things are named right
+- thresholdROI.m : interactive segmentation for poor homageneity images
 
+## instructions for analyzing one volume
 ### first run *displayTiffImagesMosaic* on the folder of tifs to make a mosaic image
-
+you can run *processAllTiffFolders.m* on this step instead to make mosaics of lots of volumes if things are organized correctly
 
 ```matlab
 function displayTiffImagesMosaic(folderPath)
