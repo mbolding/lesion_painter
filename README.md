@@ -385,7 +385,7 @@ Below is a complete example that loads all DICOM files in a directory and displa
 
 ```matlab
 % Specify the directory containing DICOM files
-dicomDir = 'path_to_your_dicom_directory';
+dicomDir = uigetdir;
 
 % List all DICOM files in the directory
 dicomFiles = dir(fullfile(dicomDir, '*.dcm'));
